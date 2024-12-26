@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Example</title>
+</head>
+<body>
+    <h1>API Message Sender</h1>
+    <form id="messageForm">
+        <label for="messageInput">Введите сообщение:</label>
+        <input type="text" id="messageInput" name="message" required>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <div id="responseMessage"></div>
+
+    <script>
+        // Обработчик отправки формы
+        document.getElementById('messageForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const message = document.getElementById('messageInput').value;
+
+            // Проверяем, что сообщение не пустое
+            if (!message) {
+                alert("Введите сообщение!");
+                return;
+            }
+
+            // Отправляем POST-запрос на API
+            fetch('http://localhost:5000/api/hello', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Показываем ответ на странице
+                document.getElementById('responseMessage').innerText = data.reply;
+            })
+            .catch(error => {
+                console.error('Ошибка при запросе:', error);
+            });
+        });
+    </script>
+</body>
+</html>
